@@ -1,0 +1,672 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Eko Chou">
+  <meta name="keywords" content="">
+  <title>async、await的线程(上下文)逻辑 - 烟火里的尘埃</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/vs.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/icon-gamepad/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"hopeko.gitee.io","root":"/","version":"1.8.7","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"d5bf492a2cde97130c7ae19437a1d117","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body>
+  <header style="height: 25vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>烟火里的尘埃</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/game/">
+                <i class="iconfont icon-gamepad"></i>
+                轻松一刻
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg-sky.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="async、await的线程(上下文)逻辑">
+              
+                async、await的线程(上下文)逻辑
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-10-02 21:25" pubdate>
+        2020年10月2日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.4k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      22
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">async、await的线程(上下文)逻辑</h1>
+            
+            <div class="markdown-body">
+              <h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
+<p>UI程序中只允许一个拥有UI上下文（SynchronizationContext）的线程运行。</p>
+<p>例1</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Button1_Click</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> sender, EventArgs e</span>)</span>
+<span class="hljs-function"></span>&#123;
+    Console.WriteLine(<span class="hljs-string">$&quot;Before WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+    <span class="hljs-keyword">await</span> WaitAsync();
+    Console.WriteLine(<span class="hljs-string">$&quot;After WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+
+    <span class="hljs-function"><span class="hljs-keyword">async</span> Task <span class="hljs-title">WaitAsync</span>(<span class="hljs-params"></span>)</span>
+<span class="hljs-function"></span>    &#123;
+        Console.WriteLine(<span class="hljs-string">$&quot;Before Task.Run =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+        <span class="hljs-keyword">await</span> Task.Run(() =&gt; &#123;
+            Console.WriteLine(<span class="hljs-string">$&quot;await =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+        &#125;);
+        Console.WriteLine(<span class="hljs-string">$&quot;After Task.Run =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+    &#125;
+&#125;
+
+<span class="hljs-comment">//点击按钮，输出</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 1</span></code></pre></div>
+<p>可以看到，除了WaitAsync里的await语句在另一线程执行，await前后的代码均在原线程，也就是UI线程执行。</p>
+<p>接下来将<code>await WaitAsync()</code>改为<code>WaitAsync().Wait()</code>再执行</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//点击按钮，输出</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 3</span></code></pre></div>
+<p>此时，程序将一直阻塞在await语句，原因是当使用<code>Task.Wait()</code> <code>Result</code> <code>GetAwaiter()</code> <code>GetResult()</code>等去获取结果时，<code>await</code>将阻塞当前线程，而当<code>await</code>内代码执行完后，<code>await</code>尝试恢复上下文，此时UI线程被阻塞，必须等<code>await</code>语句结束才能继续执行，因而造成死锁。</p>
+<p>再将await语句改为</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-keyword">await</span> Task.Run(() =&gt; &#123;
+    Console.WriteLine(<span class="hljs-string">$&quot;await =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+&#125;).ConfigureAwait(<span class="hljs-literal">false</span>);
+
+<span class="hljs-comment">//点击按钮，输出</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 1</span></code></pre></div>
+<p><code>ConfigureAwait(false)</code>给Task配置了一个标记，使得在await内部代码执行结束后忽略之前的上下文，直接用当前线程执行async里await下面的代码，因而不会造成死锁。所以，精通异步编程的大佬有句话，“一旦开始使用async，最好全程使用它”。</p>
+<p>接下来把代码恢复到最开始的版本，再将await语句改为</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-keyword">await</span> Task.Run(() =&gt; &#123;
+    Console.WriteLine(<span class="hljs-string">$&quot;await =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+&#125;).ContinueWith((task) =&gt; &#123;
+    Console.WriteLine(<span class="hljs-string">$&quot;ContinueWith =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+&#125;);
+
+<span class="hljs-comment">//多次点击按钮，输出</span>
+<span class="hljs-comment">//1</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//ContinueWith =&gt; Thread Id: 4</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 1</span>
+
+<span class="hljs-comment">//2</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//ContinueWith =&gt; Thread Id: 3</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 1</span>
+
+<span class="hljs-comment">//3</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 5</span>
+<span class="hljs-comment">//ContinueWith =&gt; Thread Id: 5</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 1</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 1</span>
+
+<span class="hljs-comment">//...</span></code></pre></div>
+<p>多次测试说明，<code>ContinueWith</code>里的代码并不一定由执行await的线程执行，具体由哪一个线程执行在于<code>TaskScheduler</code>的调度。</p>
+<h2 id="ASP-NET-Classic中的上下文"><a href="#ASP-NET-Classic中的上下文" class="headerlink" title="ASP.NET Classic中的上下文"></a>ASP.NET Classic中的上下文</h2><p>ASP.NET Classic程序（ASP.NET Core以前）使用的ASP.NET请求上下文跟UI程序的上下文不同，但结果实际上是类似的。</p>
+<div class="code-wrapper"><pre><code class="hljs csharp">Debug.WriteLine(<span class="hljs-string">$&quot;Before WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+<span class="hljs-keyword">await</span> WaitAsync();
+Debug.WriteLine(<span class="hljs-string">$&quot;After WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">async</span> Task <span class="hljs-title">WaitAsync</span>(<span class="hljs-params"></span>)</span>
+<span class="hljs-function"></span>&#123;
+    Debug.WriteLine(<span class="hljs-string">$&quot;Before Task.Run =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+    <span class="hljs-keyword">await</span> Task.Run(() =&gt; &#123;
+        Debug.WriteLine(<span class="hljs-string">$&quot;await =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+    &#125;);
+    Debug.WriteLine(<span class="hljs-string">$&quot;After Task.Run =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
+&#125;
+<span class="hljs-comment">//输出</span>
+<span class="hljs-comment">//1</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 7</span>
+
+<span class="hljs-comment">//2</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 7</span>
+
+<span class="hljs-comment">//3</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 9</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 9</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 14</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 15</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 15</span></code></pre></div>
+<p>虽然ASP.NET在await之后使用的是线程池里的线程去恢复ASP.NET请求上下文，但该请求上下文依然不能以超过一个线程同时拥有。所以，如果将<code>await WaitAsync()</code>改为<code>WaitAsync().Wait()</code>，执行</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">// 结果</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 7</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 8</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 8</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 8</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 9</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 10</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 10</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 9</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 11</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 11</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 9</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 9</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 9</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 12</span>
+
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 12</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 12</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 13</span>
+
+<span class="hljs-comment">//...</span></code></pre></div>
+<p>同样会造成原线程的阻塞（估计会造成内存泄漏），但不会造成整个ASP.NET应用的阻塞，应用会用线程池里的其他线程去响应接下来的请求。也就是说ASP.NET Classic应用会在await内代码执行完成时，尝试用线程池内的线程（可能是await前的线程，也可能不是）去恢复上下文。</p>
+<p>如果用<code>ConfigureAwait(false)</code>进行配置则不会去恢复请求上下文。</p>
+<div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//结果</span>
+<span class="hljs-comment">//1</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 6</span>
+
+<span class="hljs-comment">//2</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 8</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 8</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 8</span>
+
+<span class="hljs-comment">//3</span>
+<span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 6</span>
+<span class="hljs-comment">//await =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After Task.Run =&gt; Thread Id: 7</span>
+<span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 6</span></code></pre></div>
+<h2 id="ASP-NET-Core应用和控制台程序"><a href="#ASP-NET-Core应用和控制台程序" class="headerlink" title="ASP.NET Core应用和控制台程序"></a>ASP.NET Core应用和控制台程序</h2><p>由于ASP.NET Core使用的是线程池上下文，该上下文由线程池内所有线程共享，所以不存在上述死锁或阻塞问题。同样地，控制台也不会出现类似的问题。</p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/C/">C#</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/C/">C#</a>
+                    
+                      <a class="hover-with-bg" href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
+                        <span class="hidden-mobile">【源码】浅看Dictionary(System.Private.CoreLib)源码</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "pFtqaxf9UQSWFrQAhXAliP1j-MdYXbMMI",
+          app_key: "7LwNmQi8ONHxs8bw1a8EbxrF",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d5bf492a2cde97130c7ae19437a1d117";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>

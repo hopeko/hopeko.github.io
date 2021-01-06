@@ -1,0 +1,660 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/favicon.png">
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="Eko Chou">
+  <meta name="keywords" content="">
+  <title>Hexo不识别标签特殊符号的问题和解决 - 烟火里的尘埃</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/vs.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+<link rel="stylesheet" href="/css/icon-gamepad/iconfont.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"hopeko.gitee.io","root":"/","version":"1.8.7","typing":{"enable":false,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"onlypost":false},"web_analytics":{"enable":true,"baidu":"d5bf492a2cde97130c7ae19437a1d117","google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.3.0"></head>
+
+
+<body>
+  <header style="height: 25vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>烟火里的尘埃</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/game/">
+                <i class="iconfont icon-gamepad"></i>
+                轻松一刻
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/img/bg-sky.jpg') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Hexo不识别标签特殊符号的问题和解决">
+              
+                Hexo不识别标签特殊符号的问题和解决
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2020-04-22 20:00" pubdate>
+        2020年4月22日 晚上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.2k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      13
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Hexo不识别标签特殊符号的问题和解决</h1>
+            
+            <div class="markdown-body">
+              <p>用Hexo在Github和Gitee上部署站点之后，刚开始创建了几个md文件，里面有个tag-<code>c#</code>，后来改成<code>C#</code>（小写换成大写），出现了相关的标签页不能访问的问题。测试了很久发现主要存在几个问题（或者说是现象）。<br>另外，当同时存在如<code>C</code>、<code>C++</code>、<code>C#</code>这三个标签时，在生成网站的时候，三个标签实际上会被认作同一个标签也就是<code>C</code>。</p>
+<a id="more"></a>
+
+<style>table { margin-left: 2em; }</style>
+
+<h3 id="问题和现象"><a href="#问题和现象" class="headerlink" title="问题和现象"></a>问题和现象</h3><p><em>索引即目录</em></p>
+<ul>
+<li><p><strong>Git系统不区分索引的大小写</strong><br>一旦用Git命令创建了一个索引（需要索引下有文件才会创建），之后哪怕在本地改变了索引当中英文字母的大小写，当<code>commit</code>或者<code>push</code>的时候Git也不会对库里面的索引进行更改。而命令<code>git config core.ignorecase false</code>禁用忽略大小写也只是不忽略文件名的大小写，对索引并不有效。</p>
+</li>
+<li><p><strong>在Git系统改变文件名的大小写后不删除旧文件</strong><br>另一个奇怪的现在是当执行了命令<code>git config core.ignorecase false</code>后，如果修改了文件名的大小写后执行<code>commit</code>或者<code>push</code>后，Git确实产生了以新的大小写命名的文件，但旧文件却仍然存在，这是一个非常奇怪的现象。</p>
+</li>
+<li><p><strong>文件系统普遍不区分索引的大小写</strong><br>当发现Git是不区分索引的大小写后，我又试了win10的文件系统，也是存在同样的现象，当创建一个名为&quot;c&quot;的文件夹后，如果想在同目录下创建一个名&quot;C&quot;的文件夹会被提示已存在相同目录。</p>
+</li>
+<li><p><strong>Github、Gitee提供的Web服务区分大小写</strong><br>了解到文件系统普遍不区分索引的大小写后，我就不怪Git了，而是奇怪的是像Windows的IIS或者Apache也都是不区分网址大小写的，平常浏览网页也没未遇到因为网址的大小写不同而不能访问的情况。Github和Gitee提供的Web服务真有点神奇，不知道什么原理。</p>
+</li>
+<li><p><strong>Hexo不能识别标签的特殊符号</strong><br>Hexo创建<code>tags</code>里面的标签的时候是不能识别一些符号的，如<code>.</code>、<code>#</code>，所以如果想同时创建一个<code>C</code>标签和<code>C#</code>标签是不行的，要用<code>CSharp</code>、<code>DotNet</code>之类的写法。<br>实际上，经过测试，Github、Gitee的文件夹名都支持这类符号，如<code>.Net</code>、<code>C#</code>，而在用网址去索引的时候可以用转义字符，如<code>C#</code>可以用<code>C%23</code>去索引资源，而<code>.Net</code>甚至不用去转义。因此，这应该算是Hexo的一个小缺陷了。</p>
+</li>
+</ul>
+<p>&emsp;&emsp;<em>URL中特殊字符转义编码</em></p>
+<table>
+<thead>
+<tr>
+<th align="center">!</th>
+<th align="center">*</th>
+<th align="center">“</th>
+<th align="center">‘</th>
+<th align="center">(</th>
+<th align="center">)</th>
+<th align="center">;</th>
+<th align="center">:</th>
+<th align="center">@</th>
+<th align="center">&amp;</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">%21</td>
+<td align="center">%2A</td>
+<td align="center">%22</td>
+<td align="center">%27</td>
+<td align="center">%28</td>
+<td align="center">%29</td>
+<td align="center">%3B</td>
+<td align="center">%3A</td>
+<td align="center">%40</td>
+<td align="center">%26</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">=</th>
+<th align="center">+</th>
+<th align="center">$</th>
+<th align="center">,</th>
+<th align="center">/</th>
+<th align="center">?</th>
+<th align="center">%</th>
+<th align="center">#</th>
+<th align="center">[</th>
+<th align="center">]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">%3D</td>
+<td align="center">%2B</td>
+<td align="center">%24</td>
+<td align="center">%2C</td>
+<td align="center">%2F</td>
+<td align="center">%3F</td>
+<td align="center">%25</td>
+<td align="center">%23</td>
+<td align="center">%5B</td>
+<td align="center">%5D</td>
+</tr>
+</tbody></table>
+<p>&emsp;&emsp;<em>关于特殊字符的转义可以参照 - <a target="_blank" rel="noopener" href="https://blog.csdn.net/p312011150/article/details/78928003">网址URL中特殊字符转义编码</a></em></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>对于字母大小写问题也不是什么大问题，只要不在Github、Gitee上部署站点或者修改目录大小写的时候删除再重新创建（虽然Gitee可以直接在网页上修改目录名，但本地的也需要改，否则再提交又会恢复之前的文件夹名）就没问题了，毕竟只改目录名的大小写也不是经常会碰到的事情。</p>
+<p>而Hexo生成的标签索引忽略标点符号和特殊符号这确实是个bug，譬如如果要用到<code>C</code>、<code>C++</code>、<code>C#</code>这三个标签就只能改用<code>C</code>、<code>Cpp</code>、<code>CSharp</code>之类的标签，因为前者都是在<code>tags</code>目录下创建同样的目录<code>C</code>，如果Hexo项目组能解决这个问题就好了。</p>
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>后来无意中找到原来HTML对特殊字符有统一的编码，于是试着在tags用统一编码代替标点或特殊字符，问题解决了！生成标签的规则是将转义字符用<code>-</code>加上转义字符<code>&amp;#</code>后的数字，如md文件下的标签<code>C&amp;#35;</code>将生成标签目录<code>C-35</code>。虽然tags目录下的对应标签目录名还是不能以<code>.</code>、<code>#</code>之类命名，而是以字符对应的编码中的数字代替，但大致上解决了这个问题。</p>
+<p>&emsp;&emsp;<em>HTML中一些特殊字符的编码 参考<a target="_blank" rel="noopener" href="https://www.dazhuanlan.com/2020/01/04/5e10105eba77e/">Hexo Markdown 特殊字符转义</a></em></p>
+<table>
+<thead>
+<tr>
+<th align="center">!</th>
+<th align="center">”</th>
+<th align="center">#</th>
+<th align="center">$</th>
+<th align="center">%</th>
+<th align="center">&amp;</th>
+<th align="center">‘</th>
+<th align="center">(</th>
+<th align="center">)</th>
+<th align="center">*</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&amp;#33;</td>
+<td align="center">&amp;#34;</td>
+<td align="center">&amp;#35;</td>
+<td align="center">&amp;#36;</td>
+<td align="center">&amp;#37;</td>
+<td align="center">&amp;#38;</td>
+<td align="center">&amp;#39;</td>
+<td align="center">&amp;#40;</td>
+<td align="center">&amp;#41;</td>
+<td align="center">&amp;#42;</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">+</th>
+<th align="center">&lt;</th>
+<th align="center">=</th>
+<th align="center">-</th>
+<th align="center">&gt;</th>
+<th align="center">?</th>
+<th align="center">@</th>
+<th align="center">[</th>
+<th align="center">\</th>
+<th align="center">]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&amp;#43;</td>
+<td align="center">&amp;#60;</td>
+<td align="center">&amp;#61;</td>
+<td align="center">&amp;#45;</td>
+<td align="center">&amp;#62;</td>
+<td align="center">&amp;#63;</td>
+<td align="center">&amp;#64;</td>
+<td align="center">&amp;#91;</td>
+<td align="center">&amp;#92;</td>
+<td align="center">&amp;#93;</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">{</th>
+<th align="center">|</th>
+<th align="center">}</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">&amp;#123;</td>
+<td align="center">&amp;#124;</td>
+<td align="center">&amp;#125;</td>
+</tr>
+</tbody></table>
+<p>还有其他的特殊字符的编码可参照 - <a target="_blank" rel="noopener" href="https://blog.csdn.net/cy_baicai/article/details/82897724">特殊符号 UNICODE编码</a><br>也可以直接输入特殊字符获取它的HTML编码 - <a target="_blank" rel="noopener" href="https://www.css-js.com/tools/unicode.html">Unicode 编码&amp;解码</a></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E6%97%A5%E5%B8%B8%E5%90%90%E6%A7%BD/">日常吐槽</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/Hexo/">Hexo</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！</p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2020/05/02/%E5%88%9D%E6%AD%A5%E7%90%86%E8%A7%A3DotNet%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B_%E4%BB%BB%E5%8A%A1/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Task的使用（未完）</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2020/04/21/Objects-and-Types/">
+                        <span class="hidden-mobile">Chapter 3 - Objects and Types</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments">
+                
+                
+  <div id="vcomments"></div>
+  <script type="text/javascript">
+    Fluid.utils.waitElementVisible('vcomments', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#vcomments",
+          app_id: "pFtqaxf9UQSWFrQAhXAliP1j-MdYXbMMI",
+          app_key: "7LwNmQi8ONHxs8bw1a8EbxrF",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: true,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+<!-- SCRIPTS -->
+
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+    <!-- Baidu Analytics -->
+    <script defer>
+      var _hmt = _hmt || [];
+      (function () {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?d5bf492a2cde97130c7ae19437a1d117";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+      })();
+    </script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+
+</body>
+</html>
