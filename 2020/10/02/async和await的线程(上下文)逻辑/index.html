@@ -246,7 +246,7 @@
             <h1 style="display: none">async、await的线程(上下文)逻辑</h1>
             
             <div class="markdown-body">
-              <h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
+              <h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2 color=gray>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
 <p>UI程序中只允许唯一的一个拥有UI上下文（SynchronizationContext）的线程运行。</p>
 <p>例1</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Button1_Click</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> sender, EventArgs e</span>)</span>
