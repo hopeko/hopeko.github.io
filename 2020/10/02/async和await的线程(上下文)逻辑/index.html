@@ -247,7 +247,7 @@
             
             <div class="markdown-body">
               <h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
-<p>UI程序中只允许一个拥有UI上下文（SynchronizationContext）的线程运行。</p>
+<p>UI程序中只允许唯一的一个拥有UI上下文（SynchronizationContext）的线程运行。</p>
 <p>例1</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Button1_Click</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> sender, EventArgs e</span>)</span>
 <span class="hljs-function"></span>&#123;
@@ -358,7 +358,7 @@ Debug.WriteLine(<span class="hljs-string">$&quot;After WaitAsync =&gt; Thread Id
 <span class="hljs-comment">//await =&gt; Thread Id: 14</span>
 <span class="hljs-comment">//After Task.Run =&gt; Thread Id: 15</span>
 <span class="hljs-comment">//After WaitAsync =&gt; Thread Id: 15</span></code></pre></div>
-<p>虽然ASP.NET在await之后使用的是线程池里的线程去恢复ASP.NET请求上下文，但该请求上下文依然不能以超过一个线程同时拥有。所以，如果将<code>await WaitAsync()</code>改为<code>WaitAsync().Wait()</code>，执行</p>
+<p>虽然ASP.NET在await之后使用的是线程池里的线程去恢复ASP.NET请求上下文，但该请求上下文依然不能被超过一个线程同时拥有。所以，如果将<code>await WaitAsync()</code>改为<code>WaitAsync().Wait()</code>，执行</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">// 结果</span>
 <span class="hljs-comment">//Before WaitAsync =&gt; Thread Id: 6</span>
 <span class="hljs-comment">//Before Task.Run =&gt; Thread Id: 6</span>
@@ -389,7 +389,7 @@ Debug.WriteLine(<span class="hljs-string">$&quot;After WaitAsync =&gt; Thread Id
 <span class="hljs-comment">//await =&gt; Thread Id: 13</span>
 
 <span class="hljs-comment">//...</span></code></pre></div>
-<p>同样会造成原线程的阻塞（估计会造成内存泄漏），但不会造成整个ASP.NET应用的阻塞，应用会用线程池里的其他线程去响应接下来的请求。也就是说ASP.NET Classic应用会在await内代码执行完成时，尝试用线程池内的线程（可能是await前的线程，也可能不是）去恢复上下文。</p>
+<p>同样会造成原线程的阻塞（估计会造成内存泄漏），但不会造成整个ASP.NET应用的阻塞，应用会用线程池里的其他线程去响应接下来的请求。也就是说ASP.NET Classic应用会在await内部代码执行完成时，尝试用线程池内的线程（可能是await前的线程，也可能不是）去恢复上下文。</p>
 <p>如果用<code>ConfigureAwait(false)</code>进行配置则不会去恢复请求上下文。</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-comment">//结果</span>
 <span class="hljs-comment">//1</span>
