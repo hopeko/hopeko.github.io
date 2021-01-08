@@ -257,18 +257,19 @@ private async void Button1_Click(object sender, EventArgs e)
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(mscorlib)源码</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">
           
           
             
           
-          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍
+          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分
 在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的
+下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。
+GetHashCode首先看看如果
         </a>
       </p>
 
@@ -309,19 +310,18 @@ private async void Button1_Click(object sender, EventArgs e)
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(mscorlib)源码</a>
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
           
           
             
           
-          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分
+          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍
 在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。
-GetHashCode首先看看如果
+下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的
         </a>
       </p>
 
