@@ -233,7 +233,7 @@ private async void Button1_Click(object sender, EventArgs e)
             
               <a href="/categories/Net/">.Net</a>
             
-              <a href="/categories/Net/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+              <a href="/categories/Net/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
             
           </div>
         
@@ -257,19 +257,18 @@ private async void Button1_Click(object sender, EventArgs e)
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(mscorlib)源码</a>
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
           
           
             
           
-          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分
+          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍
 在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。
-GetHashCode首先看看如果
+下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的
         </a>
       </p>
 
@@ -310,18 +309,19 @@ GetHashCode首先看看如果
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(mscorlib)源码</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
+        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">
           
           
             
           
-          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍
+          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分
 在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的
+下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。
+GetHashCode首先看看如果
         </a>
       </p>
 
@@ -506,7 +506,7 @@ namespace DotNet_5._0_p7
             
               <a href="/categories/Net/">.Net</a>
             
-              <a href="/categories/Net/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+              <a href="/categories/Net/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
             
           </div>
         
@@ -517,6 +517,8 @@ namespace DotNet_5._0_p7
               <a href="/tags/C/">C#</a>
             
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
@@ -530,11 +532,11 @@ namespace DotNet_5._0_p7
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/05/02/%E5%88%9D%E6%AD%A5%E7%90%86%E8%A7%A3DotNet%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B_%E4%BB%BB%E5%8A%A1/">Task的使用（未完）</a>
+        <a href="/2020/05/02/%E5%88%9D%E6%AD%A5%E7%90%86%E8%A7%A3DotNet%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B_Task/">Task的使用（未完）</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/05/02/%E5%88%9D%E6%AD%A5%E7%90%86%E8%A7%A3DotNet%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B_%E4%BB%BB%E5%8A%A1/">
+        <a href="/2020/05/02/%E5%88%9D%E6%AD%A5%E7%90%86%E8%A7%A3DotNet%E7%9A%84%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B_Task/">
           
           
             
@@ -558,7 +560,7 @@ namespace DotNet_5._0_p7
             
               <a href="/categories/Net/">.Net</a>
             
-              <a href="/categories/Net/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+              <a href="/categories/Net/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
             
           </div>
         
@@ -569,6 +571,8 @@ namespace DotNet_5._0_p7
               <a href="/tags/C/">C#</a>
             
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
