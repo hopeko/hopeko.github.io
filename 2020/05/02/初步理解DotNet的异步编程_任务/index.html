@@ -286,9 +286,11 @@ func2();
 &#125;
 Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt; func = PrintText;
 Console.WriteLine(func(<span class="hljs-string">&quot;Hello&quot;</span>));</code></pre></div>
-<h2 id="Task的出现和基本语法"><a href="#Task的出现和基本语法" class="headerlink" title="Task的出现和基本语法"></a>Task的出现和基本语法</h2></li>
+
+
+</li>
 </ul>
-<p>以往要并行处理一些事务，我们通常会用到线程<code>Thread</code>，每当要并行处理一个事务就要创建一个线程，就要进行这些的工作：<br>1、创建线程并分配资源；<br>2、调度和执行线程；<br>3、结束线程并回收资源。<br>当一个进程里同时存在的线程数比CPU核心线程数量多的时候，其实超出的部分线程是无法同时执行的，也就是创建再多的线程也无法提高处理器效率。但是为了并行处理事务还是需要创建这些线程。<br>线程池<code>ThreadPool</code>的出现就是为了解决当这种情况出现时，可以用同一线程去并行处理不同事务而处理器无需浪费多余的性能和内存资源去做第一步和第三步。<br>而任务<code>Task</code>就是.Net对线程池的一种更人性化的封装，让我们可以更简单地并行处理事务。</p>
+<h2 id="Task的出现和基本语法"><a href="#Task的出现和基本语法" class="headerlink" title="Task的出现和基本语法"></a>Task的出现和基本语法</h2><p>以往要并行处理一些事务，我们通常会用到线程<code>Thread</code>，每当要并行处理一个事务就要创建一个线程，就要进行这些的工作：<br>1、创建线程并分配资源；<br>2、调度和执行线程；<br>3、结束线程并回收资源。<br>当一个进程里同时存在的线程数比CPU核心线程数量多的时候，其实超出的部分线程是无法同时执行的，也就是创建再多的线程也无法提高处理器效率。但是为了并行处理事务还是需要创建这些线程。<br>线程池<code>ThreadPool</code>的出现就是为了解决当这种情况出现时，可以用同一线程去并行处理不同事务而处理器无需浪费多余的性能和内存资源去做第一步和第三步。<br>而任务<code>Task</code>就是.Net对线程池的一种更人性化的封装，让我们可以更简单地并行处理事务。</p>
 <ul>
 <li><strong>声明和调用一个Task</strong><div class="code-wrapper"><pre><code class="hljs cs"> <span class="hljs-comment">// 1.Lambda表达式</span>
 Task task = <span class="hljs-keyword">new</span> Task(() =&gt; &#123;
@@ -643,9 +645,9 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/C/">C#</a>
+                      <a class="hover-with-bg" href="/categories/Net/">.Net</a>
                     
-                      <a class="hover-with-bg" href="/categories/C/%E6%9D%82%E8%AE%B0/">杂记</a>
+                      <a class="hover-with-bg" href="/categories/Net/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
                     
                   </div>
                 
