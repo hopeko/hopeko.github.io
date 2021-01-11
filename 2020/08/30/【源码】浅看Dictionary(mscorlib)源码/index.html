@@ -213,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      30
+      29
        分钟
     </span>
   
@@ -246,10 +246,10 @@
             <h1 style="display: none">【源码】浅看Dictionary(mscorlib)源码</h1>
             
             <div class="markdown-body">
-              <p><strong>注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分</strong></p>
+              <p><strong>注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，已在另一篇博文对比介绍</strong><a href="../../../../2020/09/15/【源码】浅看Dictionary(System.Private.CoreLib)源码/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a></p>
 <p>在自定义类重写<code>Equals()</code>和<code>GetHashCode()</code>的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。</p>
 <p>下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。</p>
-<h2 id="GetHashCode"><a href="#GetHashCode" class="headerlink" title="GetHashCode"></a>GetHashCode</h2><p>首先看看如果在重写<code>Equals()</code>的时候不重写<code>GetHashCode()</code>会发生什么</p>
+<h2 id="GetHashCode"><a href="#GetHashCode" class="headerlink" title="GetHashCode"></a>GetHashCode</h2><p>首先看看如果在重写<code>Equals()</code>的时候不重写<code>GetHashCode()</code>会出现什么情况</p>
 <div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Cat</span></span>
 <span class="hljs-class"></span>&#123;
     public string Name;
@@ -312,7 +312,7 @@
 &#125;</code></pre></div>
 <p>再看<code>Insert()</code></p>
 <p>这里有两个关键的变量<code>entries</code>和<code>buckets</code></p>
-<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[] entries;	<span class="hljs-comment">// 按下标顺序（从0开始）存储每一个元素、对应的hashCode、下一个entry的下标</span>
+<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[] entries;	<span class="hljs-comment">// 按下标顺序（从0开始）（.Net Core里的_entries从1开始）存储每一个元素、对应的hashCode、下一个entry的下标</span>
 <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span>[] buckets;	<span class="hljs-comment">// 存储entries下标的哈希表，用元素的hashCode对buckets.Length取余作为下标可快速找到对应的entry</span>
 
 <span class="hljs-keyword">private</span> <span class="hljs-keyword">struct</span> Entry &#123;
@@ -360,7 +360,7 @@
         freeCount--;	<span class="hljs-comment">// 闲置数减一</span>
     &#125;
     <span class="hljs-keyword">else</span> &#123;
-        <span class="hljs-comment">// 如果entries空间不够用了，就对entries和buckets进行扩展</span>
+        <span class="hljs-comment">// 如果entries空间不够用了，就对entries和buckets进行扩容</span>
         <span class="hljs-keyword">if</span> (count == entries.Length)
         &#123;
             Resize();
@@ -376,7 +376,7 @@
     entries[index].<span class="hljs-keyword">value</span> = <span class="hljs-keyword">value</span>;
     buckets[targetBucket] = index;	<span class="hljs-comment">// [2]</span>
     <span class="hljs-comment">// 这里标记的[1][2]两句是关键，</span>
-    <span class="hljs-comment">// 当存储使用这个哈希值Key的第一个元素时，next = buckets[targetBucket] = -1，buckets[targetBucket]置为该元素的下标</span>
+    <span class="hljs-comment">// 当存储的元素作为当前hashCode的第一个元素时，next = buckets[targetBucket] = -1，buckets[targetBucket]置为该元素的下标</span>
     <span class="hljs-comment">// 而后每一次存储有带着相同哈希值Key的元素时，next指向上一个带着相同哈希值Key的元素，buckets[targetBucket]置为新元素的下标</span>
     version++;	<span class="hljs-comment">// 当对Dictionary进行Add或Update或Remove“增、改、删”操作时，Dictionary的version加一</span>
 
@@ -407,10 +407,10 @@
 &#125;</code></pre></div>
 
 
-<h3 id="Resize"><a href="#Resize" class="headerlink" title="Resize"></a>Resize</h3><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
+<h2 id="Resize"><a href="#Resize" class="headerlink" title="Resize"></a>Resize</h2><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Resize</span>(<span class="hljs-params"></span>)</span> &#123;
     Resize(HashHelpers.ExpandPrime(count), <span class="hljs-literal">false</span>);
-    <span class="hljs-comment">// HashHelpers.ExpandPrime(count)调用GetPrime(2 * oldSize)取大于当前元素数量2倍的最小素数作为新哈希表的长度。</span>
+    <span class="hljs-comment">// HashHelpers.ExpandPrime(count)方法调用GetPrime(2 * oldSize)取大于当前元素数量2倍的最小素数作为新哈希表的长度。</span>
 &#125;
 
 <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Resize</span>(<span class="hljs-params"><span class="hljs-built_in">int</span> newSize, <span class="hljs-built_in">bool</span> forceNewHashCodes</span>)</span> &#123;
@@ -426,10 +426,9 @@
             &#125;
         &#125;
     &#125;
-    <span class="hljs-comment">// 对所有旧元素hashCode重新取余</span>
+    <span class="hljs-comment">// // 对所有元素hashCode重新取余，重设下标</span>
     <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; count; i++) &#123;
-        <span class="hljs-comment">// 这里不知道为什么有if(newEntries[i].hashCode &gt;= 0)的判断，在Insert()函数里hashCode = comparer.GetHashCode(key) &amp; 0x7FFFFFFF，所以hashCode是不可能小于0的。可能在别的地方有用。</span>
-        <span class="hljs-keyword">if</span> (newEntries[i].hashCode &gt;= <span class="hljs-number">0</span>) &#123;
+        <span class="hljs-keyword">if</span> (newEntries[i].hashCode &gt;= <span class="hljs-number">0</span>) &#123;	<span class="hljs-comment">// 过滤Remove后的闲置位</span>
             <span class="hljs-built_in">int</span> bucket = newEntries[i].hashCode % newSize;
             newEntries[i].next = newBuckets[bucket];
             newBuckets[bucket] = i;
@@ -457,7 +456,7 @@
                 <span class="hljs-keyword">else</span> &#123;
                     entries[last].next = entries[i].next;
                 &#125;
-                entries[i].hashCode = <span class="hljs-number">-1</span>;
+                entries[i].hashCode = <span class="hljs-number">-1</span>;	<span class="hljs-comment">// hashCode设为-1，做个标记</span>
                 entries[i].next = freeList;	<span class="hljs-comment">// next指向上一个被Remove的元素的坐标，若没有则为-1</span>
                 entries[i].key = <span class="hljs-literal">default</span>(TKey);
                 entries[i].<span class="hljs-keyword">value</span> = <span class="hljs-literal">default</span>(TValue);
@@ -520,9 +519,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2020/10/02/async%E5%92%8Cawait%E7%9A%84%E7%BA%BF%E7%A8%8B(%E4%B8%8A%E4%B8%8B%E6%96%87)%E9%80%BB%E8%BE%91/">
+                      <a href="/2020/09/15/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">async、await的线程(上下文)逻辑</span>
+                        <span class="hidden-mobile">【源码】浅看Dictionary(System.Private.CoreLib)源码</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -530,8 +529,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
-                        <span class="hidden-mobile">【源码】浅看Dictionary(System.Private.CoreLib)源码</span>
+                      <a href="/2020/08/29/%E3%80%90%E8%AF%AD%E6%B3%95%E3%80%91!%20_null%20%E5%8C%85%E5%AE%B9%E6%93%8D%E4%BD%9C%E7%AC%A6/">
+                        <span class="hidden-mobile">【语法】! - null包容操作符</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

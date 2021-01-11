@@ -257,6 +257,58 @@ private async void Button1_Click(object sender, EventArgs e)
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
+        <a href="/2020/09/15/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2020/09/15/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
+          
+          
+            
+          
+          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍【源码】浅看Dictionary(mscorlib)源码
+.Net Core的 Dictionary的实现使用了大量的 ref，目的都是为了用直接寻址替代间接寻址来提高性能
+在自定义类重写Equals()和GetHash
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2020-09-15 23:43" pubdate>
+              2020-09-15
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Net/">.Net</a>
+            
+              <a href="/categories/Net/%E6%BA%90%E7%A0%81/">源码</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/C/">C#</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+    <article class="col-12 col-md-12 mx-auto index-info">
+      <h1 class="index-header">
+        
         <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(mscorlib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(mscorlib)源码</a>
       </h1>
 
@@ -266,10 +318,9 @@ private async void Button1_Click(object sender, EventArgs e)
           
             
           
-          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，之后会另写一篇加以区分
+          注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，已在另一篇博文对比介绍【源码】浅看Dictionary(System.Private.CoreLib)源码
 在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。
-GetHashCode首先看看如果
+下面通过看看几个最常用的Dictionary
         </a>
       </p>
 
@@ -310,63 +361,11 @@ GetHashCode首先看看如果
     <article class="col-12 col-md-12 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a>
+        <a href="/2020/08/29/%E3%80%90%E8%AF%AD%E6%B3%95%E3%80%91!%20_null%20%E5%8C%85%E5%AE%B9%E6%93%8D%E4%BD%9C%E7%AC%A6/">【语法】! - null包容操作符</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2020/08/30/%E3%80%90%E6%BA%90%E7%A0%81%E3%80%91%E6%B5%85%E7%9C%8BDictionary(System.Private.CoreLib)%E6%BA%90%E7%A0%81/">
-          
-          
-            
-          
-          注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍
-在自定义类重写Equals()和GetHashCode()的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。
-下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-08-30 21:15" pubdate>
-              2020-08-30
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Net/">.Net</a>
-            
-              <a href="/categories/Net/%E6%BA%90%E7%A0%81/">源码</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">C#</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/08/29/%E3%80%90%E8%AF%AD%E6%B3%95%E3%80%91!%20_null%20%E5%8C%85%E5%AE%B9%E8%BF%90%E7%AE%97%E7%AC%A6/">【语法】! - null包容运算符</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/08/29/%E3%80%90%E8%AF%AD%E6%B3%95%E3%80%91!%20_null%20%E5%8C%85%E5%AE%B9%E8%BF%90%E7%AE%97%E7%AC%A6/">
+        <a href="/2020/08/29/%E3%80%90%E8%AF%AD%E6%B3%95%E3%80%91!%20_null%20%E5%8C%85%E5%AE%B9%E6%93%8D%E4%BD%9C%E7%AC%A6/">
           
           
             
@@ -462,9 +461,9 @@ namespace DotNet_5._0_p7
             
               <a href="/tags/C/">C#</a>
             
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
@@ -516,9 +515,9 @@ namespace DotNet_5._0_p7
             
               <a href="/tags/C/">C#</a>
             
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
@@ -570,9 +569,9 @@ namespace DotNet_5._0_p7
             
               <a href="/tags/C/">C#</a>
             
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
