@@ -247,7 +247,7 @@
             
             <div class="markdown-body">
               <p><strong>注：本文参考的源码来自System.Private.CoreLib.dll，会有部分代码逻辑不同于.Net Framework的Dictionary。如需了解可参考本博客另一篇介绍</strong><a href="../../../../2020/08/30/【源码】浅看Dictionary(mscorlib)源码/">【源码】浅看Dictionary(mscorlib)源码</a></p>
-<p><span style='font-size=2;font-style:italic;font-weight:bold;color:gray'>.Net Core的 Dictionary的实现使用了大量的 <span style="color:red">ref</span>，目的都是为了用直接寻址替代间接寻址来提高性能</span></p>
+<p><span style='font-size=2;font-style:italic;font-weight:bold;color:gray'>.Net Core的 Dictionary的实现使用了大量的 <span style="color:#f95288">ref</span>，目的都是为了用直接寻址替代间接寻址来提高性能</span></p>
 <p>在自定义类重写<code>Equals()</code>和<code>GetHashCode()</code>的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。</p>
 <p>下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。</p>
 <h2 id="GetHashCode"><a href="#GetHashCode" class="headerlink" title="GetHashCode"></a>GetHashCode</h2><p>首先看看如果在重写<code>Equals()</code>的时候不重写<code>GetHashCode()</code>会出现什么情况</p>
@@ -375,9 +375,9 @@
     Debug.Assert(modified); <span class="hljs-comment">// If there was an existing key and the Add failed, an exception will already have been thrown.</span>
 &#125;</code></pre></div>
 <p>再看<code>TryInsert()</code></p>
-<p>这里有两个关键的变量<code>entries</code>和<code>buckets</code></p>
-<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[]? _entries;	<span class="hljs-comment">// 按下标顺序（从1开始）（.Net Framework里的entries从0开始）存储每一个元素、对应的hashCode、下一个entry的下标</span>
-<span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span>[]? _buckets;	<span class="hljs-comment">// 存储entries下标的哈希表，用元素的hashCode对buckets.Length取余作为下标可快速找到对应的entry</span>
+<p>这里有两个关键的变量<code>_entries</code>和<code>_buckets</code></p>
+<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[]? _entries;	<span class="hljs-comment">// 按下标顺序存储每一个元素、对应的hashCode、下一个entry的下标</span>
+<span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span>[]? _buckets;	<span class="hljs-comment">// 存储entries下标（+1）（.Net Framework里的buckets无需+1）的哈希表，用元素的hashCode对buckets.Length取余作为下标可快速找到对应的entry</span>
 
 <span class="hljs-keyword">private</span> <span class="hljs-keyword">struct</span> Entry &#123;
     <span class="hljs-keyword">public</span> <span class="hljs-built_in">int</span> hashCode;    <span class="hljs-comment">// Lower 31 bits of hash code, -1 if unused</span>
@@ -662,8 +662,6 @@
         Array.Clear(_entries, <span class="hljs-number">0</span>, count);
     &#125;
 &#125;</code></pre></div>
-
-
 
 
 <p>官方源码：<a target="_blank" rel="noopener" href="https://source.dot.net/#System.Private.CoreLib/Dictionary.cs">Dictionary.cs</a></p>

@@ -312,7 +312,7 @@
 &#125;</code></pre></div>
 <p>再看<code>Insert()</code></p>
 <p>这里有两个关键的变量<code>entries</code>和<code>buckets</code></p>
-<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[] entries;	<span class="hljs-comment">// 按下标顺序（从0开始）（.Net Core里的_entries从1开始）存储每一个元素、对应的hashCode、下一个entry的下标</span>
+<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">private</span> Entry[] entries;	<span class="hljs-comment">// 存储每一个元素、对应的hashCode、下一个entry的下标</span>
 <span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span>[] buckets;	<span class="hljs-comment">// 存储entries下标的哈希表，用元素的hashCode对buckets.Length取余作为下标可快速找到对应的entry</span>
 
 <span class="hljs-keyword">private</span> <span class="hljs-keyword">struct</span> Entry &#123;
@@ -482,8 +482,6 @@
         version++;
     &#125;
 &#125;</code></pre></div>
-
-
 
 
 <p>官方源码：<a target="_blank" rel="noopener" href="https://referencesource.microsoft.com/#mscorlib/system/collections/generic/dictionary.cs">Dictionary.cs</a></p>
