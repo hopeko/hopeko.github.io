@@ -511,13 +511,10 @@
 
     <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
 &#125;</code></pre></div>
-<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><center class="half">
-    <img src="https://i.loli.net/2021/01/15/hF13N9PdLzTAQ5e.png" srcset="/img/loading.gif" alt="" style="zoom:67%;" />
-    &nbsp;&nbsp;-->&nbsp;&nbsp;
-    <img src="https://i.loli.net/2021/01/15/7brjNXBmLU5FviY.png" srcset="/img/loading.gif" alt="" style="zoom:67%;" />
-</center>
+<h3 id="图解"><a href="#图解" class="headerlink" title="图解"></a>图解</h3><img src="https://i.loli.net/2021/01/15/fb9crBHA5SI213v.png" srcset="/img/loading.gif" alt="" style="zoom:80%;" />
 
-<p>左图的Dictionary有一个元素，entries[0].hashCode = 8，8 % buckets.Length = 1，因此，entries[0].next = buckets[1] - 1 = -1，buckets[1] = 0 + 1 = 1，实际指向entries[0]。</p>
+
+<p>左边的Dictionary有一个元素，entries[0].hashCode = 8，8 % buckets.Length = 1，因此，entries[0].next = buckets[1] - 1 = -1，buckets[1] = 0 + 1 = 1，实际指向entries[0]。</p>
 <p>此时插入第二个元素，entries[1].hashCode = 15，15 % buckets.Length = 1，因此，entries[1].next = buckets[1] - 1 = 0，buckets[1] = 1 + 1 = 2，实际指向entries[1]。</p>
 <h2 id="Resize"><a href="#Resize" class="headerlink" title="Resize"></a>Resize</h2><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Resize</span>(<span class="hljs-params"></span>)</span> =&gt; Resize(HashHelpers.ExpandPrime(_count), <span class="hljs-literal">false</span>);
