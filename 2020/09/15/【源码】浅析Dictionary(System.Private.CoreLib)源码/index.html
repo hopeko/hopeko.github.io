@@ -441,7 +441,7 @@
 
                 i = entries[i].next;	<span class="hljs-comment">// 检查下一个hashCode相同的元素</span>
 
-                collisionCount++;	<span class="hljs-comment">// 记录哈希值冲突数（若不理解，可到下方介绍Add方法前提供的链接了解）</span>
+                collisionCount++;	<span class="hljs-comment">// 记录哈希值冲突数</span>
                 <span class="hljs-keyword">if</span> (collisionCount &gt; (uint)entries.Length)
                 &#123;
                     <span class="hljs-comment">// The chain of entries forms a loop; which means a concurrent update has happened.</span>
