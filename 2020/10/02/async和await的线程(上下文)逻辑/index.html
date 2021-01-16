@@ -203,7 +203,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.4k 字
+      1.5k 字
     </span>
   
 
@@ -213,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      22
+      23
        分钟
     </span>
   
@@ -246,7 +246,10 @@
             <h1 style="display: none">async、await的线程(上下文)逻辑</h1>
             
             <div class="markdown-body">
-              <h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2 color=gray>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
+              <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>请记住这两句话：</p>
+<p><strong>1、默认情况下，await返回时总是会去恢复await前的上下文。</strong></p>
+<p><strong>2、每一个应用程序都有自己的线程池和线程池上下文</strong></p>
+<h2 id="UI程序的上下文"><a href="#UI程序的上下文" class="headerlink" title="UI程序的上下文"></a>UI程序的上下文</h2><p><font size=2 color=gray>当一个方法被关键字<code>async</code>声明时，意味着该方法可异步执行，同时激活方法内的<code>await</code>关键字。</font> </p>
 <p>UI程序中只允许唯一的一个拥有UI上下文（SynchronizationContext）的线程运行。</p>
 <p>例1</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Button1_Click</span>(<span class="hljs-params"><span class="hljs-built_in">object</span> sender, EventArgs e</span>)</span>
@@ -324,7 +327,7 @@
 
 <span class="hljs-comment">//...</span></code></pre></div>
 <p>多次测试说明，<code>ContinueWith</code>里的代码并不一定由执行await的线程执行，具体由哪一个线程执行在于<code>TaskScheduler</code>的调度。</p>
-<h2 id="ASP-NET-Classic中的上下文"><a href="#ASP-NET-Classic中的上下文" class="headerlink" title="ASP.NET Classic中的上下文"></a>ASP.NET Classic中的上下文</h2><p>ASP.NET Classic程序（ASP.NET Core以前）使用的ASP.NET请求上下文跟UI程序的上下文不同，但结果实际上是类似的。</p>
+<h2 id="ASP-NET-Classic中的上下文"><a href="#ASP-NET-Classic中的上下文" class="headerlink" title="ASP.NET Classic中的上下文"></a>ASP.NET Classic中的上下文</h2><p>ASP.NET Classic程序（ASP.NET Core以前）使用的ASP.NET请求上下文跟UI程序的上下文略有不同，但结果实际上是类似的。</p>
 <div class="code-wrapper"><pre><code class="hljs csharp">Debug.WriteLine(<span class="hljs-string">$&quot;Before WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);
 <span class="hljs-keyword">await</span> WaitAsync();
 Debug.WriteLine(<span class="hljs-string">$&quot;After WaitAsync =&gt; Thread Id: <span class="hljs-subst">&#123;Thread.CurrentThread.ManagedThreadId&#125;</span>&quot;</span>);

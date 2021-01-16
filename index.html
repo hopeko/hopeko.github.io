@@ -209,12 +209,13 @@
           
             
           
-          UI程序的上下文当一个方法被关键字async声明时，意味着该方法可异步执行，同时激活方法内的await关键字。 
+          前言请记住这两句话：
+1、默认情况下，await返回时总是会去恢复await前的上下文。
+2、每一个应用程序都有自己的线程池和线程池上下文
+UI程序的上下文当一个方法被关键字async声明时，意味着该方法可异步执行，同时激活方法内的await关键字。 
 UI程序中只允许唯一的一个拥有UI上下文（SynchronizationContext）的线程运行。
 例1
-private async void Button1_Click(object sender, EventArgs e)
-&#123;
-    Console.WriteLine
+private async void 
         </a>
       </p>
 
@@ -461,63 +462,9 @@ namespace DotNet_5._0_p7
             
               <a href="/tags/C/">C#</a>
             
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
               <a href="/tags/Task/">Task</a>
             
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-    <article class="col-12 col-md-12 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2020/05/06/%E5%85%B3%E4%BA%8ETask%E7%9A%84%E5%A5%87%E6%80%AA%E7%8E%B0%E8%B1%A1/">关于Task的一些奇怪现象</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2020/05/06/%E5%85%B3%E4%BA%8ETask%E7%9A%84%E5%A5%87%E6%80%AA%E7%8E%B0%E8%B1%A1/">
-          
-          
-            
-          
-          在学习和使用Task的过程中，发现了一些有意思或者非常奇怪的现象，有必要汇总一下这些现象，让其他跟我一样不惑的同学节省一点时间。
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2020-05-06 20:01" pubdate>
-              2020-05-06
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Net/">.Net</a>
-            
-              <a href="/categories/Net/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">并发编程</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/C/">C#</a>
-            
               <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
-              <a href="/tags/Task/">Task</a>
             
           </div>
         
@@ -569,9 +516,9 @@ namespace DotNet_5._0_p7
             
               <a href="/tags/C/">C#</a>
             
-              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
-            
               <a href="/tags/Task/">Task</a>
+            
+              <a href="/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
             
           </div>
         
