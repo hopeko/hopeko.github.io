@@ -203,7 +203,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      3.9k 字
+      3.8k 字
     </span>
   
 
@@ -246,7 +246,7 @@
             <h1 style="display: none">Task的使用（未完）</h1>
             
             <div class="markdown-body">
-              <h1 id="1-0-Action和Func"><a href="#1-0-Action和Func" class="headerlink" title="1.0 Action和Func"></a>1.0 Action和Func</h1><p>两者其实都是对delegate的封装，使得声明委托的过程更简单，使用起来也更方便。而delegate、Action、Func都使得处理数据更加灵活，因为我们可以创建一个函数接收开发者或客户的数据参数的同时还能根据不同场景接受不同的处理方式。</p>
+              <h1 id="Action和Func"><a href="#Action和Func" class="headerlink" title="Action和Func"></a>Action和Func</h1><p>两者其实都是对delegate的封装，使得声明委托的过程更简单，使用起来也更方便。而delegate、Action、Func都使得处理数据更加灵活，因为我们可以创建一个函数接收开发者或客户的数据参数的同时还能根据不同场景接受不同的处理方式。</p>
 <p>Action，顾名思义就是一个“动作”，简单来说就是一个包装了不带返回值函数的委托。可声明不带返回值、接受零个或多个参数的方法的委托。</p>
 <ul>
 <li><p><strong>声明和调用一个Action</strong></p>
@@ -286,9 +286,11 @@ func2();
 &#125;
 Func&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt; func = PrintText;
 Console.WriteLine(func(<span class="hljs-string">&quot;Hello&quot;</span>));</code></pre></div>
-<h1 id="2-0-Task的出现和基本语法"><a href="#2-0-Task的出现和基本语法" class="headerlink" title="2.0 Task的出现和基本语法"></a>2.0 Task的出现和基本语法</h1></li>
+
+
+</li>
 </ul>
-<p>以往要并行处理一些事务，我们通常会用到线程<code>Thread</code>，每当要并行处理一个事务就要创建一个线程，就要进行这些的工作：<br>1、创建线程并分配资源；<br>2、调度和执行线程；<br>3、结束线程并回收资源。<br>当一个进程里同时存在的线程数比CPU核心线程数量多的时候，其实超出的部分线程是无法同时执行的，也就是创建再多的线程也无法提高处理器效率。但是为了并行处理事务还是需要创建这些线程。<br>线程池<code>ThreadPool</code>的出现就是为了解决当这种情况出现时，可以用同一线程去并行处理不同事务而处理器无需浪费多余的性能和内存资源去做第一步和第三步。<br>而任务<code>Task</code>就是.Net对线程池的一种更人性化的封装，让我们可以更简单地并行处理事务。</p>
+<h1 id="Task的出现和基本语法"><a href="#Task的出现和基本语法" class="headerlink" title="Task的出现和基本语法"></a>Task的出现和基本语法</h1><p>以往要并行处理一些事务，我们通常会用到线程<code>Thread</code>，每当要并行处理一个事务就要创建一个线程，就要进行这些的工作：<br>1、创建线程并分配资源；<br>2、调度和执行线程；<br>3、结束线程并回收资源。<br>当一个进程里同时存在的线程数比CPU核心线程数量多的时候，其实超出的部分线程是无法同时执行的，也就是创建再多的线程也无法提高处理器效率。但是为了并行处理事务还是需要创建这些线程。<br>线程池<code>ThreadPool</code>的出现就是为了解决当这种情况出现时，可以用同一线程去并行处理不同事务而处理器无需浪费多余的性能和内存资源去做第一步和第三步。<br>而任务<code>Task</code>就是.Net对线程池的一种更人性化的封装，让我们可以更简单地并行处理事务。</p>
 <ul>
 <li><strong>声明和调用一个Task</strong><div class="code-wrapper"><pre><code class="hljs cs"> <span class="hljs-comment">// 1.Lambda表达式</span>
 Task task = <span class="hljs-keyword">new</span> Task(() =&gt; &#123;
@@ -379,7 +381,7 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
 <span class="hljs-attribute">13</span>:<span class="hljs-number">40</span>:<span class="hljs-number">5057</span> continue</code></pre></div>
 可以看出来，<code>PrintText(&quot;Hello&quot;).Start()</code>执行的是<code>return</code>的<code>Task</code>里面的内容，对<code>PrintText</code>函数里的代码跟普通函数一样，由主线程执行。那如果我们希望能够异步执行我们希望异步执行的代码该怎么做？这时候就要引入两个关键字<code>async</code>和<code>await</code></li>
 </ul>
-<h1 id="3-0-async和await"><a href="#3-0-async和await" class="headerlink" title="3.0 async和await"></a>3.0 async和await</h1><p>async和await关键字的引入大大增加了异步编程的灵活性。</p>
+<h1 id="async和await"><a href="#async和await" class="headerlink" title="async和await"></a>async和await</h1><p>async和await关键字的引入大大增加了异步编程的灵活性。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task&lt;<span class="hljs-built_in">int</span>&gt; <span class="hljs-title">PrintText</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> text</span>)</span>
 <span class="hljs-function"></span>&#123;
     Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">&#123;DateTime.Now:mm:ss:ffff&#125;</span> PrintText Started&quot;</span>);
@@ -417,7 +419,9 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
     Console.WriteLine(PrintText(<span class="hljs-string">&quot;Hello&quot;</span>).Result);
     Console.WriteLine(<span class="hljs-string">$&quot;<span class="hljs-subst">&#123;DateTime.Now:mm:ss:ffff&#125;</span> continue&quot;</span>);
 &#125;</code></pre></div>
-<h1 id="4-0-Task的简单应用"><a href="#4-0-Task的简单应用" class="headerlink" title="4.0 Task的简单应用"></a>4.0 Task的简单应用</h1><p>假设一个场景，你要到奶茶店点一杯宇治抹茶，但是因为你接下来有其他事情要处理，所以你只能等待2分半钟，如果超过这个时间就取消订单。</p>
+
+
+<h1 id="Task的简单应用"><a href="#Task的简单应用" class="headerlink" title="Task的简单应用"></a>Task的简单应用</h1><p>假设一个场景，你要到奶茶店点一杯宇治抹茶，但是因为你接下来有其他事情要处理，所以你只能等待2分半钟，如果超过这个时间就取消订单。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">readonly</span> <span class="hljs-title">Dictionary</span>&lt;<span class="hljs-title">string</span>, <span class="hljs-title">int</span>&gt; timeTable</span> = <span class="hljs-keyword">new</span> Dictionary&lt;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">int</span>&gt;() &#123; &#123; <span class="hljs-string">&quot;宇治抹茶&quot;</span>, <span class="hljs-number">3</span> &#125;, &#123; <span class="hljs-string">&quot;珍珠奶茶&quot;</span>, <span class="hljs-number">2</span> &#125; &#125;;
 
 <span class="hljs-function"><span class="hljs-keyword">static</span> Task <span class="hljs-title">OrderMilkTea</span>(<span class="hljs-params"><span class="hljs-built_in">string</span> tea, CancellationToken cancellationToken</span>)</span>
@@ -490,8 +494,8 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
 <span class="hljs-attribute">44</span>:<span class="hljs-number">34</span>:<span class="hljs-number">8849</span> 订单已取消</code></pre></div>
 <p>在这个例子里，我们新建了两个Task，task1代表制作奶茶，task2代表手机的计时。下单后，在等待制作奶茶的时候，我们可以处理我们想要处理的事情（在这个例子里处理了1分钟），当2分半的计时结束后，奶茶还没制作完成，于是我们取消了订单。</p>
 <p>1、<code>Task.WaitAny(params Task[] tasks)</code>: 阻塞等待参数中最先完成的任务，返回最先完成的任务的下标（按参数从左到右的顺序）<br>2、<code>CancellationTokenSource</code>: 这个类的逻辑是非常简单的信号操作。通过<code>CancellationTokenSource.Cancel()</code>设置取消信号，在任务中检查<code>CancellationTokenSource.Token.IsCancellationRequested</code>的值，若为true，则通过<code>Token.ThrowIfCancellationRequested()</code>抛出异常打断任务。事实上，通过<code>throw new OperationCanceledException()</code>以及<code>OperationCanceledException()</code>的相关重载函数也能达到一样的效果。<br>3、<code>Task.Run(Action action, CancellationToken cancellationToken)</code>: 假设我们在去到奶茶店后临时改变计划而取消，也就是在<code>Task.WaitAny(task1, task2)</code>前就调用<code>cancelTokenSource.Cancel()</code>,那通过<code>Task.Run(Action action, CancellationToken cancellationToken)</code>可以在执行任务前就取消掉任务。本示例演示了通过<code>Task.Run(Action action)</code>并在任务开始时就检查信号达到类似的效果。</p>
-<h1 id="5-0-Task的取消"><a href="#5-0-Task的取消" class="headerlink" title="5.0 Task的取消"></a>5.0 Task的取消</h1><h2 id="5-1-CancellationTokenSource"><a href="#5-1-CancellationTokenSource" class="headerlink" title="5.1 CancellationTokenSource"></a>5.1 CancellationTokenSource</h2><p>如上例子。</p>
-<h2 id="5-2-Thread-Abort"><a href="#5-2-Thread-Abort" class="headerlink" title="5.2 Thread.Abort"></a>5.2 Thread.Abort</h2><p>上面“点奶茶”的例子通过调用<code>CancellationTokenSource.Cancel()</code>去取消任务时，并不是立刻就取消掉任务，而需要在<code>Thread.Sleep(1000)</code>（也就是制作一段时间）结束等待后才能结束。Task类本身并没有提供立即取消任务的机制，但如果我们想要“立刻”中止任务，有没有办法呢？下面利用<code>Thread.Abort</code>尝试一下。<br><font size=2 color=gray>下面的例子参考自<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4359910/is-it-possible-to-abort-a-task-like-aborting-a-thread-thread-abort-method">Is it possible to abort a Task like aborting a Thread (Thread.Abort method)?</a>上的回答</font></p>
+<h1 id="Task的取消"><a href="#Task的取消" class="headerlink" title="Task的取消"></a>Task的取消</h1><h2 id="CancellationTokenSource"><a href="#CancellationTokenSource" class="headerlink" title="CancellationTokenSource"></a>CancellationTokenSource</h2><p>如上例子。</p>
+<h2 id="Thread-Abort"><a href="#Thread-Abort" class="headerlink" title="Thread.Abort"></a>Thread.Abort</h2><p>上面“点奶茶”的例子通过调用<code>CancellationTokenSource.Cancel()</code>去取消任务时，并不是立刻就取消掉任务，而需要在<code>Thread.Sleep(1000)</code>（也就是制作一段时间）结束等待后才能结束。Task类本身并没有提供立即取消任务的机制，但如果我们想要“立刻”中止任务，有没有办法呢？下面利用<code>Thread.Abort</code>尝试一下。<br><font size=2 color=gray>下面的例子参考自<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/4359910/is-it-possible-to-abort-a-task-like-aborting-a-thread-thread-abort-method">Is it possible to abort a Task like aborting a Thread (Thread.Abort method)?</a>上的回答</font></p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-keyword">class</span> <span class="hljs-title">HardAborter</span>
 &#123;
     <span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> WasAborted &#123; <span class="hljs-keyword">get</span>; <span class="hljs-keyword">private</span> <span class="hljs-keyword">set</span>; &#125;
@@ -556,7 +560,7 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
 <p>然而，这其实存在三个问题。第一，虽然看起来任务在调用<code>hardAborter.Abort()</code>时马上就被中止了，但事实上，任务所在的线程还在运行。因为如果一个线程正在进行IO的调用或者等待，哪怕通过<code>Thread.Abort</code>去中止线程，线程也无法立刻中止，而需要等IO调用返回或者等待结束才能中止。第二，这种“不透明”的操作对于开发者都是不应该的。第三，由于线程池里的线程经常负责多个任务的执行，如果为了中止一个任务而中止了所在的线程，很可能造成其他问题（未验证）。</p>
 <p><strong>但是</strong>，假设我们开启的一个线程调用了一个第三方的方法，而这个方法由于某种原因超时工作，而这个第三方库有没有提供中止的方法（当然这是不应该的），我们必需主动去中止这个线程。这个时候，利用<code>Thread.Abort</code>去中止线程是必要的。</p>
 <p><strong>但是</strong>，从ASP.NET Core开始，<code>Thread.Abort</code>就被弃用了，如果在之后的版本中尝试调用会抛出<em>PlatformNotSupportedException</em>、<em>SecurityException</em>、<em>ThreadStateException</em>等异常，那怎么去解决上述这种特殊情况呢？</p>
-<h2 id="5-3-kernel32-API"><a href="#5-3-kernel32-API" class="headerlink" title="5.3 kernel32 API"></a>5.3 kernel32 API</h2><p>这里的例子直接使用 <a target="_blank" rel="noopener" href="https://stackoverflow.com/a/55709530/9897639">How to abort a Task like aborting a Thread</a> 答案提供的扩展方法。</p>
+<h2 id="kernel32-API"><a href="#kernel32-API" class="headerlink" title="kernel32 API"></a>kernel32 API</h2><p>这里的例子直接使用 <a target="_blank" rel="noopener" href="https://stackoverflow.com/a/55709530/9897639">How to abort a Task like aborting a Thread</a> 答案提供的扩展方法。</p>
 <div class="code-wrapper"><pre><code class="hljs csharp"><span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">async</span> Task <span class="hljs-title">Main</span>(<span class="hljs-params"><span class="hljs-built_in">string</span>[] args</span>)</span>
 <span class="hljs-function"></span>&#123;
     <span class="hljs-keyword">new</span> Action(PrintElapsed).RunWithAbort(<span class="hljs-number">5000</span>);	<span class="hljs-comment">// 线程会如期在5000毫秒左右中止</span>
@@ -635,6 +639,7 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
         <span class="hljs-keyword">return</span> item;
     &#125;
 &#125;</code></pre></div>
+
             </div>
             <hr>
             <div>

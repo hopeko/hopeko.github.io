@@ -213,7 +213,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      31
+      30
        分钟
     </span>
   
@@ -249,7 +249,7 @@
               <p><strong>注：本文参考的源码来自mscorlib.dll，会有部分代码逻辑不同于.Net Core的Dictionary，已在另一篇博文对比介绍</strong><a href="../../../../2020/09/15/【源码】浅看Dictionary(System.Private.CoreLib)源码/">【源码】浅看Dictionary(System.Private.CoreLib)源码</a></p>
 <p>在自定义类重写<code>Equals()</code>和<code>GetHashCode()</code>的时候有些好奇，所以想看看Dictionary查找Key和存储键值对的原理。</p>
 <p>下面通过看看几个最常用的Dictionary的方法，了解一下Dictionary的实现原理。</p>
-<h1 id="1-0-GetHashCode"><a href="#1-0-GetHashCode" class="headerlink" title="1.0 GetHashCode"></a>1.0 GetHashCode</h1><p>首先看看如果在重写<code>Equals()</code>的时候不重写<code>GetHashCode()</code>会出现什么情况</p>
+<h1 id="GetHashCode"><a href="#GetHashCode" class="headerlink" title="GetHashCode"></a>GetHashCode</h1><p>首先看看如果在重写<code>Equals()</code>的时候不重写<code>GetHashCode()</code>会出现什么情况</p>
 <div class="code-wrapper"><pre><code class="hljs js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Cat</span></span>
 <span class="hljs-class"></span>&#123;
     public string Name;
@@ -280,7 +280,7 @@
 <span class="hljs-comment">// 输出</span>
 <span class="hljs-comment">// False</span></code></pre></div>
 <p>可以看到虽然有两个“一样”的Key，<code>&#123; new Cat &#123; Name=&quot;小黑&quot;, Birth = &quot;2020-2-1&quot; &#125;, &quot;小黑&quot; &#125;</code>和<code>&#123; new Cat &#123; Name=&quot;小黑&quot;, Birth = &quot;2020-2-1&quot; &#125;, &quot;小黑2&quot; &#125;</code>，但是Dictionary还是正常初始化了，而在ContainsKey()时找不到Key。</p>
-<h1 id="2-0-ContainsKey"><a href="#2-0-ContainsKey" class="headerlink" title="2.0 ContainsKey"></a>2.0 ContainsKey</h1><p>源码中的ContainsKey()直接return<code>FindEntry(key) &gt;= 0;</code>，再看看FindEntry()的实现</p>
+<h1 id="ContainsKey"><a href="#ContainsKey" class="headerlink" title="ContainsKey"></a>ContainsKey</h1><p>源码中的ContainsKey()直接return<code>FindEntry(key) &gt;= 0;</code>，再看看FindEntry()的实现</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-built_in">int</span> <span class="hljs-title">FindEntry</span>(<span class="hljs-params">TKey key</span>)</span> &#123;
     <span class="hljs-keyword">if</span>( key == <span class="hljs-literal">null</span>) &#123;
         ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
@@ -307,7 +307,7 @@
 
 <hr>
 <p><font size=4>Dictionary的基本原理其实就是利用一个hash表对Key和Key_Value进行存储和寻址。要看懂源码先要有点<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011109881/article/details/80379505">哈希表</a>相关的基础，没有数据结构基础的慢慢看也不难懂。</font></p>
-<h1 id="3-0-Add"><a href="#3-0-Add" class="headerlink" title="3.0 Add"></a>3.0 Add</h1><div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Add</span>(<span class="hljs-params">TKey key, TValue <span class="hljs-keyword">value</span></span>)</span> &#123;
+<h1 id="Add"><a href="#Add" class="headerlink" title="Add"></a>Add</h1><div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Add</span>(<span class="hljs-params">TKey key, TValue <span class="hljs-keyword">value</span></span>)</span> &#123;
     Insert(key, <span class="hljs-keyword">value</span>, <span class="hljs-literal">true</span>);
 &#125;</code></pre></div>
 <p>再看<code>Insert()</code></p>
@@ -411,7 +411,7 @@
 
 <p>左边的Dictionary有一个元素，entries[0].hashCode = 8，8 % buckets.Length = 1，因此，entries[0].next = buckets[1] = -1，buckets[1] = 0，实际指向entries[0]。</p>
 <p>此时插入第二个元素，entries[1].hashCode = 15，15 % buckets.Length = 1，因此，entries[1].next = buckets[1] = 0，buckets[1] = 1，实际指向entries[1]。</p>
-<h2 id="3-1-Resize"><a href="#3-1-Resize" class="headerlink" title="3.1 Resize"></a>3.1 Resize</h2><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
+<h2 id="Resize"><a href="#Resize" class="headerlink" title="Resize"></a>Resize</h2><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Resize</span>(<span class="hljs-params"></span>)</span> &#123;
     Resize(HashHelpers.ExpandPrime(count), <span class="hljs-literal">false</span>);
     <span class="hljs-comment">// HashHelpers.ExpandPrime(count)方法调用GetPrime(2 * oldSize)取大于当前元素数量2倍的最小素数作为新哈希表的长度。</span>
@@ -441,7 +441,9 @@
     buckets = newBuckets;
     entries = newEntries;
 &#125;</code></pre></div>
-<h1 id="4-0-Remove"><a href="#4-0-Remove" class="headerlink" title="4.0 Remove"></a>4.0 Remove</h1><div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">Remove</span>(<span class="hljs-params">TKey key</span>)</span> &#123;
+
+
+<h1 id="Remove"><a href="#Remove" class="headerlink" title="Remove"></a>Remove</h1><div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-built_in">bool</span> <span class="hljs-title">Remove</span>(<span class="hljs-params">TKey key</span>)</span> &#123;
     <span class="hljs-keyword">if</span>(key == <span class="hljs-literal">null</span>) &#123;
         ThrowHelper.ThrowArgumentNullException(ExceptionArgument.key);
     &#125;
@@ -471,7 +473,9 @@
     &#125;
     <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
 &#125;</code></pre></div>
-<h1 id="5-0-Clear"><a href="#5-0-Clear" class="headerlink" title="5.0 Clear"></a>5.0 Clear</h1><p>为了提高效率，Clear函数没有对entries和buckets置null，只是把相关的变量重新初始化了。也符合逻辑，如果置null，那我为什么不直接new一个新的Dictionary呢。</p>
+
+
+<h1 id="Clear"><a href="#Clear" class="headerlink" title="Clear"></a>Clear</h1><p>为了提高效率，Clear函数没有对entries和buckets置null，只是把相关的变量重新初始化了。也符合逻辑，如果置null，那我为什么不直接new一个新的Dictionary呢。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Clear</span>(<span class="hljs-params"></span>)</span> &#123;
     <span class="hljs-keyword">if</span> (count &gt; <span class="hljs-number">0</span>) &#123;
         <span class="hljs-keyword">for</span> (<span class="hljs-built_in">int</span> i = <span class="hljs-number">0</span>; i &lt; buckets.Length; i++) buckets[i] = <span class="hljs-number">-1</span>;
