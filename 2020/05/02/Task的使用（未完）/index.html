@@ -554,7 +554,7 @@ Console.WriteLine(task.Result); <span class="hljs-comment">// 获取返回值</s
 <div class="code-wrapper"><pre><code class="hljs apache"><span class="hljs-attribute">21</span>:<span class="hljs-number">16</span>:<span class="hljs-number">2408</span> task started
 <span class="hljs-attribute">21</span>:<span class="hljs-number">16</span>:<span class="hljs-number">3018</span> abort task, task state: Background, WaitSleepJoin, AbortRequested
 <span class="hljs-attribute">21</span>:<span class="hljs-number">16</span>:<span class="hljs-number">3028</span> task aborted</code></pre></div>
-<p>通过<code>Canceller.Token.Register(Thread.CurrentThread.Abort)</code>在任务创建时，把任务所在线程的<code>About()</code>注册为<code>Token.Cancel()</code>的action，也就是当执行Token.Cancel()时会把任务所在线程Abort掉。</p>
+<p>通过<code>Canceller.Token.Register(Thread.CurrentThread.Abort)</code>在任务创建时，把任务所在线程的<code>Abort()</code>注册为<code>Token.Cancel()</code>的action，也就是当执行Token.Cancel()时会把任务所在线程Abort掉。</p>
 <p>然而，这其实存在三个问题。第一，虽然看起来任务在调用<code>hardAborter.Abort()</code>时马上就被中止了，但事实上，任务所在的线程还在运行。因为如果一个线程正在进行IO的调用或者等待，哪怕通过<code>Thread.Abort</code>去中止线程，线程也无法立刻中止，而需要等IO调用返回或者等待结束才能中止。第二，这种“不透明”的操作对于开发者都是不应该的。第三，由于线程池里的线程经常负责多个任务的执行，如果为了中止一个任务而中止了所在的线程，很可能造成其他问题（未验证）。</p>
 <p><strong>但是</strong>，假设我们开启的一个线程调用了一个第三方的方法，而这个方法由于某种原因超时工作，而这个第三方库有没有提供中止的方法（当然这是不应该的），我们必需主动去中止这个线程。这个时候，利用<code>Thread.Abort</code>去中止线程是必要的。</p>
 <p><strong>但是</strong>，从ASP.NET Core开始，<code>Thread.Abort</code>就被弃用了，如果在之后的版本中尝试调用会抛出<em>PlatformNotSupportedException</em>、<em>SecurityException</em>、<em>ThreadStateException</em>等异常，那怎么去解决上述这种特殊情况呢？</p>
