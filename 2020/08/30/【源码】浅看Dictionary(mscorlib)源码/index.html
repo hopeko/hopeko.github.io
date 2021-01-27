@@ -307,7 +307,14 @@
 
 <hr>
 <p><font size=4>Dictionary的基本原理其实就是利用一个hash表对Key和Key_Value进行存储和寻址。要看懂源码先要有点<a target="_blank" rel="noopener" href="https://blog.csdn.net/u011109881/article/details/80379505">哈希表</a>相关的基础，没有数据结构基础的慢慢看也不难懂。</font></p>
-<h1 id="Add"><a href="#Add" class="headerlink" title="Add"></a>Add</h1><div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Add</span>(<span class="hljs-params">TKey key, TValue <span class="hljs-keyword">value</span></span>)</span> &#123;
+<h1 id="Add"><a href="#Add" class="headerlink" title="Add"></a>Add</h1><p><strong>先上图</strong></p>
+<img src="https://i.loli.net/2021/01/17/2e98V1h4KaD7nBX.png" srcset="/img/loading.gif" alt="" style="zoom:80%;" />
+
+
+<p>左边的Dictionary有一个元素，entries[0].hashCode = 8，8 % buckets.Length = <strong>1</strong>，因此，entries[0].next = buckets[<strong>1</strong>] = -1，buckets[<strong>1</strong>] = 0，实际指向entries[0]。</p>
+<p>此时插入第二个元素，entries[1].hashCode = 15，15 % buckets.Length = <strong>1</strong>，因此，entries[1].next = buckets[<strong>1</strong>] = 0，buckets[<strong>1</strong>] = 1，实际指向entries[1]。</p>
+<p><strong>带着图看源码</strong></p>
+<div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Add</span>(<span class="hljs-params">TKey key, TValue <span class="hljs-keyword">value</span></span>)</span> &#123;
     Insert(key, <span class="hljs-keyword">value</span>, <span class="hljs-literal">true</span>);
 &#125;</code></pre></div>
 <p>再看<code>Insert()</code></p>
@@ -405,12 +412,8 @@
 <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
 
 &#125;</code></pre></div>
-<p><strong>图解</strong></p>
-<img src="https://i.loli.net/2021/01/17/2e98V1h4KaD7nBX.png" srcset="/img/loading.gif" alt="" style="zoom:80%;" />
 
 
-<p>左边的Dictionary有一个元素，entries[0].hashCode = 8，8 % buckets.Length = 1，因此，entries[0].next = buckets[1] = -1，buckets[1] = 0，实际指向entries[0]。</p>
-<p>此时插入第二个元素，entries[1].hashCode = 15，15 % buckets.Length = 1，因此，entries[1].next = buckets[1] = 0，buckets[1] = 1，实际指向entries[1]。</p>
 <h2 id="Resize"><a href="#Resize" class="headerlink" title="Resize"></a>Resize</h2><p>Resize()会在字典，也就是entries容量不够时执行，对字典进行扩展。</p>
 <div class="code-wrapper"><pre><code class="hljs cs"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Resize</span>(<span class="hljs-params"></span>)</span> &#123;
     Resize(HashHelpers.ExpandPrime(count), <span class="hljs-literal">false</span>);
